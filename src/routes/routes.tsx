@@ -1,5 +1,7 @@
 import { lazy } from "react";
 import React from "react";
+import CarDetailPage from "../pages/CarDetailPage/CarDetailPage";
+
 interface RouteConfig {
   path: string;
   element: React.ReactNode;
@@ -14,6 +16,7 @@ export const mainLayoutRoutes: RouteConfig[] = [
   { path: "", element: <Homepage /> },
   { path: "addcar", element: <AddCar /> },
   { path: "listcar", element: <CarList /> },
+  { path: "/cardetail/:id", element: <CarDetailPage /> },
 ];
 
 export const noLayoutRoutes: RouteConfig[] = [

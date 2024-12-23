@@ -12,7 +12,7 @@ const Header = () => {
     <Navbar fluid rounded className="bg-cyan-600">
       <NavbarBrand as={Link} href="https://flowbite-react.com">
         <span className="self-center whitespace-nowrap text-xl font-semibol text-white">
-          Flowbite React
+          CAR FILTER
         </span>
       </NavbarBrand>
       <NavbarToggle />

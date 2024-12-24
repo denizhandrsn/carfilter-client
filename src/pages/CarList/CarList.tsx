@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Label } from "flowbite-react";
+import { Button, Card, Checkbox, Label, Tabs, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import CarDetailPage from "../CarDetailPage/CarDetailPage";
 import { Link } from "react-router-dom";
@@ -114,390 +114,10 @@ export interface CarDetail {
   };
 }
 
-type FilterConfig = {
-  [key: string]: {
-    path: string;
-    type: "boolean" | "string" | "number";
-  };
-};
-const filtersConfig: FilterConfig = {
-  // carGeneralDetail
-  "carDetail.carGeneralDetail.bodyType": {
-    path: "carDetail.carGeneralDetail.bodyType",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.transmission": {
-    path: "carDetail.carGeneralDetail.transmission",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.numberOfSeats": {
-    path: "carDetail.carGeneralDetail.numberOfSeats",
-    type: "number",
-  },
-  "carDetail.carGeneralDetail.segment": {
-    path: "carDetail.carGeneralDetail.segment",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.driveWheel": {
-    path: "carDetail.carGeneralDetail.driveWheel",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.fuelType": {
-    path: "carDetail.carGeneralDetail.fuelType",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.horsePower": {
-    path: "carDetail.carGeneralDetail.horsePower",
-    type: "number",
-  },
-  "carDetail.carGeneralDetail.torque": {
-    path: "carDetail.carGeneralDetail.torque",
-    type: "number",
-  },
-  "carDetail.carGeneralDetail.engineCapacity": {
-    path: "carDetail.carGeneralDetail.engineCapacity",
-    type: "string",
-  },
-  "carDetail.carGeneralDetail.turbo": {
-    path: "carDetail.carGeneralDetail.turbo",
-    type: "boolean",
-  },
-  "carDetail.carGeneralDetail.fuelTankCapacity": {
-    path: "carDetail.carGeneralDetail.fuelTankCapacity",
-    type: "number",
-  },
-  "carDetail.carGeneralDetail.cargoCapacity": {
-    path: "carDetail.carGeneralDetail.cargoCapacity",
-    type: "number",
-  },
-
-  // carSafetyDetail
-  "carDetail.carSafetyDetail.abs": {
-    path: "carDetail.carSafetyDetail.abs",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.brakeAssist": {
-    path: "carDetail.carSafetyDetail.brakeAssist",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.emergencyBraking": {
-    path: "carDetail.carSafetyDetail.emergencyBraking",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.blindSpotAssist": {
-    path: "carDetail.carSafetyDetail.blindSpotAssist",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.stabilityControl": {
-    path: "carDetail.carSafetyDetail.stabilityControl",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.tractionControl": {
-    path: "carDetail.carSafetyDetail.tractionControl",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.driverAirbag": {
-    path: "carDetail.carSafetyDetail.driverAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.passangerAirbag": {
-    path: "carDetail.carSafetyDetail.passangerAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.sideAirbag": {
-    path: "carDetail.carSafetyDetail.sideAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.headAirbag": {
-    path: "carDetail.carSafetyDetail.headAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.kneeAirbag": {
-    path: "carDetail.carSafetyDetail.kneeAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.laneAirbag": {
-    path: "carDetail.carSafetyDetail.laneAirbag",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.fatigueSensor": {
-    path: "carDetail.carSafetyDetail.fatigueSensor",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.tirePressureSensor": {
-    path: "carDetail.carSafetyDetail.tirePressureSensor",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.trafficSignRecognition": {
-    path: "carDetail.carSafetyDetail.trafficSignRecognition",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.collisionWarningSystem": {
-    path: "carDetail.carSafetyDetail.collisionWarningSystem",
-    type: "boolean",
-  },
-  "carDetail.carSafetyDetail.automaticLevelControl": {
-    path: "carDetail.carSafetyDetail.automaticLevelControl",
-    type: "boolean",
-  },
-
-  // carPerformanceDetail
-  "carDetail.carPerformanceDetail.topSpeed": {
-    path: "carDetail.carPerformanceDetail.topSpeed",
-    type: "number",
-  },
-  "carDetail.carPerformanceDetail.acceleration": {
-    path: "carDetail.carPerformanceDetail.acceleration",
-    type: "string",
-  },
-  "carDetail.carPerformanceDetail.urbanConsumption": {
-    path: "carDetail.carPerformanceDetail.urbanConsumption",
-    type: "string",
-  },
-  "carDetail.carPerformanceDetail.emmision": {
-    path: "carDetail.carPerformanceDetail.emmision",
-    type: "string",
-  },
-  "carDetail.carPerformanceDetail.powerConsumption": {
-    path: "carDetail.carPerformanceDetail.powerConsumption",
-    type: "string",
-  },
-  "carDetail.carPerformanceDetail.batteryRange": {
-    path: "carDetail.carPerformanceDetail.batteryRange",
-    type: "number",
-  },
-
-  // carComfortDetail
-  "carDetail.carComfortDetail.centralDoorLock": {
-    path: "carDetail.carComfortDetail.centralDoorLock",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.keylessEntry": {
-    path: "carDetail.carComfortDetail.keylessEntry",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.startButton": {
-    path: "carDetail.carComfortDetail.startButton",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.controlCircut": {
-    path: "carDetail.carComfortDetail.controlCircut",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.electricWindowsFront": {
-    path: "carDetail.carComfortDetail.electricWindowsFront",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.electricWindowsBack": {
-    path: "carDetail.carComfortDetail.electricWindowsBack",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.powerSteering": {
-    path: "carDetail.carComfortDetail.powerSteering",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.cruiseControl": {
-    path: "carDetail.carComfortDetail.cruiseControl",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.airConditioning": {
-    path: "carDetail.carComfortDetail.airConditioning",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.parkingSensors": {
-    path: "carDetail.carComfortDetail.parkingSensors",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.reverseCamera": {
-    path: "carDetail.carComfortDetail.reverseCamera",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.parkingMachine": {
-    path: "carDetail.carComfortDetail.parkingMachine",
-    type: "boolean",
-  },
-  "carDetail.carComfortDetail.startStopSystem": {
-    path: "carDetail.carComfortDetail.startStopSystem",
-    type: "boolean",
-  },
-
-  // carInteriorDetail
-  "carDetail.carInteriorDetail.heightAdjustmentSeat": {
-    path: "carDetail.carInteriorDetail.heightAdjustmentSeat",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.electricAdjustmentSeat": {
-    path: "carDetail.carInteriorDetail.electricAdjustmentSeat",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.heatedSeats": {
-    path: "carDetail.carInteriorDetail.heatedSeats",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.ventilatedSeats": {
-    path: "carDetail.carInteriorDetail.ventilatedSeats",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.sportsSeat": {
-    path: "carDetail.carInteriorDetail.sportsSeat",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.adjustableSteeringWheel": {
-    path: "carDetail.carInteriorDetail.adjustableSteeringWheel",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.heatedSteeringWheel": {
-    path: "carDetail.carInteriorDetail.heatedSteeringWheel",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.rearHeadrest": {
-    path: "carDetail.carInteriorDetail.rearHeadrest",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.foldingRearSeat": {
-    path: "carDetail.carInteriorDetail.foldingRearSeat",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.slidingRearSeat": {
-    path: "carDetail.carInteriorDetail.slidingRearSeat",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.centralArmRest": {
-    path: "carDetail.carInteriorDetail.centralArmRest",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.makeUpMirror": {
-    path: "carDetail.carInteriorDetail.makeUpMirror",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.adjustableDashboardLighting": {
-    path: "carDetail.carInteriorDetail.adjustableDashboardLighting",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.tachometer": {
-    path: "carDetail.carInteriorDetail.tachometer",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.dayCounter": {
-    path: "carDetail.carInteriorDetail.dayCounter",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.coolantTemperatureGauge": {
-    path: "carDetail.carInteriorDetail.coolantTemperatureGauge",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.outsiteTemperatureGauge": {
-    path: "carDetail.carInteriorDetail.outsiteTemperatureGauge",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.boardComputer": {
-    path: "carDetail.carInteriorDetail.boardComputer",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.audioSystem": {
-    path: "carDetail.carInteriorDetail.audioSystem",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.digitalRadio": {
-    path: "carDetail.carInteriorDetail.digitalRadio",
-    type: "boolean",
-  },
-  "carDetail.carInteriorDetail.audioInput": {
-    path: "carDetail.carInteriorDetail.audioInput",
-    type: "string",
-  },
-  "carDetail.carInteriorDetail.navigationSystem": {
-    path: "carDetail.carInteriorDetail.navigationSystem",
-    type: "number",
-  },
-  "carDetail.carInteriorDetail.bluetooth": {
-    path: "carDetail.carInteriorDetail.bluetooth",
-    type: "number",
-  },
-
-  // carExteriorDetail
-  "carDetail.carExteriorDetail.intervalWiper": {
-    path: "carDetail.carExteriorDetail.intervalWiper",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.alloyWheels": {
-    path: "carDetail.carExteriorDetail.alloyWheels",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.rainSensor": {
-    path: "carDetail.carExteriorDetail.rainSensor",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.sunRoof": {
-    path: "carDetail.carExteriorDetail.sunRoof",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.panoramicRoof": {
-    path: "carDetail.carExteriorDetail.panoramicRoof",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.roofRails": {
-    path: "carDetail.carExteriorDetail.roofRails",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.mettalicPaint": {
-    path: "carDetail.carExteriorDetail.mettalicPaint",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.paintedBumpers": {
-    path: "carDetail.carExteriorDetail.paintedBumpers",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.tintedGlass": {
-    path: "carDetail.carExteriorDetail.tintedGlass",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.rearPrivacyGlass": {
-    path: "carDetail.carExteriorDetail.rearPrivacyGlass",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.electricMirrors": {
-    path: "carDetail.carExteriorDetail.electricMirrors",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.foldingExteriorMirrors": {
-    path: "carDetail.carExteriorDetail.foldingExteriorMirrors",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.frontFogLights": {
-    path: "carDetail.carExteriorDetail.frontFogLights",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.xenonHeadLights": {
-    path: "carDetail.carExteriorDetail.xenonHeadLights",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.ledHeahlights": {
-    path: "carDetail.carExteriorDetail.ledHeahlights",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.ledRearLighting": {
-    path: "carDetail.carExteriorDetail.ledRearLighting",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.dayLights": {
-    path: "carDetail.carExteriorDetail.dayLights",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.headlampWasher": {
-    path: "carDetail.carExteriorDetail.headlampWasher",
-    type: "boolean",
-  },
-  "carDetail.carExteriorDetail.burglarAlarm": {
-    path: "carDetail.carExteriorDetail.burglarAlarm",
-    type: "boolean",
-  },
-};
-
 const CarList: React.FC = () => {
   const [cars, setCars] = useState<CarDetail[]>([]);
   const [filteredCars, setFilteredCars] = useState<CarDetail[]>([]);
-  const [filters, setFilters] = useState<{ [key: string]: string }>({});
+  const [filters, setFilters] = useState<Record<string, string | boolean>>({});
 
   useEffect(() => {
     fetch("https://localhost:7298/api/Car/getcars")
@@ -508,102 +128,652 @@ const CarList: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const filtered = cars.filter((car) => {
-      return Object.keys(filters).every((key) => {
-        const { path, type } = filtersConfig[key];
-        const value = path
-          .split(".")
-          .reduce((obj: any, prop) => obj?.[prop], car);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, type, value, checked } = e.target;
+    setFilters((prev) => {
+      if (type === "checkbox") {
+        return {
+          ...prev,
+          [name]: checked,
+        };
+      } else {
+        return {
+          ...prev,
+          [name]: value,
+        };
+      }
+    });
+  };
 
-        if (type === "boolean") {
-          return filters[key] === "true" ? value === true : value === false;
-        } else if (type === "string") {
-          return value === filters[key];
-        } else if (type === "number") {
-          return value === Number(filters[key]);
+  const flattenObject = (
+    obj: any,
+    parentKey = "",
+    res: { [key: string]: any } = {}
+  ): { [key: string]: any } => {
+    for (const key in obj) {
+      const propName = parentKey ? `${parentKey}.${key}` : key;
+      if (typeof obj[key] === "object" && obj[key] !== null) {
+        flattenObject(obj[key], propName, res);
+      } else {
+        res[propName] = obj[key];
+      }
+    }
+    return res;
+  };
+
+  useEffect(() => {
+    let result = [...cars];
+    const getCarProp = (car: CarDetail, propName: string): any => {
+      switch (propName) {
+        case "brand":
+          return car.brand;
+        case "model":
+          return car.model;
+        case "generation":
+          return car.generation;
+        case "bodyType":
+          return car.carDetail.carGeneralDetail.bodyType;
+        case "transmission":
+          return car.carDetail.carGeneralDetail.transmission;
+        case "numberOfSeats":
+          return car.carDetail.carGeneralDetail.numberOfSeats;
+        case "segment":
+          return car.carDetail.carGeneralDetail.segment;
+        case "driveWheel":
+          return car.carDetail.carGeneralDetail.driveWheel;
+        case "fuelType":
+          return car.carDetail.carGeneralDetail.fuelType;
+        case "horsePower":
+          return car.carDetail.carGeneralDetail.horsePower;
+        case "torque":
+          return car.carDetail.carGeneralDetail.torque;
+        case "engineCapacity":
+          return car.carDetail.carGeneralDetail.engineCapacity;
+        case "turbo":
+          return car.carDetail.carGeneralDetail.turbo;
+        case "fuelTankCapacity":
+          return car.carDetail.carGeneralDetail.fuelTankCapacity;
+        case "cargoCapacity":
+          return car.carDetail.carGeneralDetail.cargoCapacity;
+        //!General Bitiş
+        case "abs":
+          return car.carDetail.carSafetyDetail.abs;
+        case "brakeAssist":
+          return car.carDetail.carSafetyDetail.brakeAssist;
+        case "emergencyBraking":
+          return car.carDetail.carSafetyDetail.emergencyBraking;
+        case "blindSpotAssist":
+          return car.carDetail.carSafetyDetail.blindSpotAssist;
+        case "stabilityControl":
+          return car.carDetail.carSafetyDetail.stabilityControl;
+        case "tractionControl":
+          return car.carDetail.carSafetyDetail.tractionControl;
+        case "driverAirbag":
+          return car.carDetail.carSafetyDetail.driverAirbag;
+        case "passangerAirbag":
+          return car.carDetail.carSafetyDetail.passangerAirbag;
+        case "headAirbag":
+          return car.carDetail.carSafetyDetail.headAirbag;
+        case "kneeAirbag":
+          return car.carDetail.carSafetyDetail.kneeAirbag;
+        case "laneAirbag":
+          return car.carDetail.carSafetyDetail.laneAirbag;
+        case "fatigueSensor":
+          return car.carDetail.carSafetyDetail.fatigueSensor;
+        case "tirePressureSensor":
+          return car.carDetail.carSafetyDetail.tirePressureSensor;
+        case "trafficSignRecognition":
+          return car.carDetail.carSafetyDetail.trafficSignRecognition;
+        case "collisionWarningSystem":
+          return car.carDetail.carSafetyDetail.collisionWarningSystem;
+        case "automaticLevelControl":
+          return car.carDetail.carSafetyDetail.automaticLevelControl;
+        //! Safety Bitiş
+        case "topSpeed":
+          return car.carDetail.carPerformanceDetail.topSpeed;
+        case "acceleration":
+          return car.carDetail.carPerformanceDetail.acceleration;
+        case "urbanConsumption":
+          return car.carDetail.carPerformanceDetail.urbanConsumption;
+        case "emmision":
+          return car.carDetail.carPerformanceDetail.emmision;
+        case "powerConsumption":
+          return car.carDetail.carPerformanceDetail.powerConsumption;
+        case "batteryRange":
+          return car.carDetail.carPerformanceDetail.batteryRange;
+        //! Performance Bitiş
+        case "centralDoorLock":
+          return car.carDetail.carComfortDetail.centralDoorLock;
+        case "keylessEntry":
+          return car.carDetail.carComfortDetail.keylessEntry;
+        case "startButton":
+          return car.carDetail.carComfortDetail.startButton;
+        case "controlCircut":
+          return car.carDetail.carComfortDetail.controlCircut;
+        case "electricWindowsFront":
+          return car.carDetail.carComfortDetail.electricWindowsFront;
+        case "electricWindowsBack":
+          return car.carDetail.carComfortDetail.electricWindowsBack;
+        case "powerSteering":
+          return car.carDetail.carComfortDetail.powerSteering;
+        case "cruiseControl":
+          return car.carDetail.carComfortDetail.cruiseControl;
+        case "airConditioning":
+          return car.carDetail.carComfortDetail.airConditioning;
+        case "parkingSensors":
+          return car.carDetail.carComfortDetail.parkingSensors;
+        case "reverseCamera":
+          return car.carDetail.carComfortDetail.reverseCamera;
+        case "parkingMachine":
+          return car.carDetail.carComfortDetail.parkingMachine;
+        case "startStopSystem":
+          return car.carDetail.carComfortDetail.startStopSystem;
+        //! Comfort Bitiş
+        case "heightAdjustmentSeat":
+          return car.carDetail.carInteriorDetail.heightAdjustmentSeat;
+        case "electricAdjustmentSeat":
+          return car.carDetail.carInteriorDetail.electricAdjustmentSeat;
+        case "heatedSeats":
+          return car.carDetail.carInteriorDetail.heatedSeats;
+        case "ventilatedSeats":
+          return car.carDetail.carInteriorDetail.ventilatedSeats;
+        case "sportsSeat":
+          return car.carDetail.carInteriorDetail.sportsSeat;
+        case "adjustableSteeringWheel":
+          return car.carDetail.carInteriorDetail.adjustableSteeringWheel;
+        case "heatedSteeringWheel":
+          return car.carDetail.carInteriorDetail.heatedSteeringWheel;
+        case "rearHeadrest":
+          return car.carDetail.carInteriorDetail.rearHeadrest;
+        case "foldingRearSeat":
+          return car.carDetail.carInteriorDetail.foldingRearSeat;
+        case "slidingRearSeat":
+          return car.carDetail.carInteriorDetail.slidingRearSeat;
+        case "centralArmRest":
+          return car.carDetail.carInteriorDetail.centralArmRest;
+        case "makeUpMirror":
+          return car.carDetail.carInteriorDetail.makeUpMirror;
+        case "adjustableDashboardLighting":
+          return car.carDetail.carInteriorDetail.adjustableDashboardLighting;
+        case "tachometer":
+          return car.carDetail.carInteriorDetail.tachometer;
+        case "dayCounter":
+          return car.carDetail.carInteriorDetail.dayCounter;
+        case "coolantTemperatureGauge":
+          return car.carDetail.carInteriorDetail.coolantTemperatureGauge;
+        case "outsiteTemperatureGauge":
+          return car.carDetail.carInteriorDetail.outsiteTemperatureGauge;
+        case "boardComputer":
+          return car.carDetail.carInteriorDetail.boardComputer;
+        case "audioSystem":
+          return car.carDetail.carInteriorDetail.audioSystem;
+        case "digitalRadio":
+          return car.carDetail.carInteriorDetail.digitalRadio;
+        case "audioInput":
+          return car.carDetail.carInteriorDetail.audioInput;
+        case "navigationSystem":
+          return car.carDetail.carInteriorDetail.navigationSystem;
+        case "bluetooth":
+          return car.carDetail.carInteriorDetail.bluetooth;
+        //! Interior Bitiş
+        case "intervalWiper":
+          return car.carDetail.carExteriorDetail.intervalWiper;
+        case "alloyWheels":
+          return car.carDetail.carExteriorDetail.alloyWheels;
+        case "rainSensor":
+          return car.carDetail.carExteriorDetail.rainSensor;
+        case "sunRoof":
+          return car.carDetail.carExteriorDetail.sunRoof;
+        case "panoramicRoof":
+          return car.carDetail.carExteriorDetail.panoramicRoof;
+        case "roofRails":
+          return car.carDetail.carExteriorDetail.roofRails;
+        case "mettalicPaint":
+          return car.carDetail.carExteriorDetail.mettalicPaint;
+        case "paintedBumpers":
+          return car.carDetail.carExteriorDetail.paintedBumpers;
+        case "tintedGlass":
+          return car.carDetail.carExteriorDetail.tintedGlass;
+        case "rearPrivacyGlass":
+          return car.carDetail.carExteriorDetail.rearPrivacyGlass;
+        case "electricMirrors":
+          return car.carDetail.carExteriorDetail.electricMirrors;
+        case "foldingExteriorMirrors":
+          return car.carDetail.carExteriorDetail.foldingExteriorMirrors;
+        case "frontFogLights":
+          return car.carDetail.carExteriorDetail.frontFogLights;
+        case "xenonHeadLights":
+          return car.carDetail.carExteriorDetail.xenonHeadLights;
+        case "ledHeahlights":
+          return car.carDetail.carExteriorDetail.ledHeahlights;
+        case "ledRearLighting":
+          return car.carDetail.carExteriorDetail.ledRearLighting;
+        case "dayLights":
+          return car.carDetail.carExteriorDetail.dayLights;
+        case "headlampWasher":
+          return car.carDetail.carExteriorDetail.headlampWasher;
+        case "burglarAlarm":
+          return car.carDetail.carExteriorDetail.burglarAlarm;
+        //! Exterior Bitiş
+        default:
+          return null;
+      }
+    };
+
+    Object.entries(filters).forEach(([key, filterValue]) => {
+      if (filterValue === "" || filterValue === false) {
+        return;
+      }
+
+      result = result.filter((car) => {
+        const carVal = getCarProp(car, key);
+
+        if (typeof filterValue === "boolean") {
+          return carVal === true;
+        } else if (typeof filterValue === "string") {
+          return carVal
+            .toString()
+            .toLowerCase()
+            .includes(filterValue.toLowerCase());
         }
+
         return true;
       });
     });
-    setFilteredCars(filtered);
-  }, [filters, cars]);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, checked } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: checked ? value : "",
-    }));
-  };
-  const handleBooleanCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value, checked } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: checked ? JSON.parse(value) : null,
-    }));
-  };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilteredCars(result);
+  }, [cars, filters]);
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: value,
-    }));
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
-  return (
-    <div>
-      <div className="filters">
-        <div>
-          <label>
-            Abs:
-            <label>Var</label>
-            <input
-              type="checkbox"
-              name="abs"
-              value="true"
-              onChange={handleCheckboxChange}
-            />
-            <label>Yok</label>
-            <input
-              type="checkbox"
-              name="abs"
-              value="false"
-              onChange={handleCheckboxChange}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Fuel Type:
-            <select
-              name="fuelType"
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, fuelType: e.target.value }))
-              }
-            >
-              <option value="">Tümü</option>
-              <option value="Petrol">Petrol</option>
-              <option value="Diesel">Diesel</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Horse Power:
-            <input
-              type="number"
-              name="horsePower"
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, horsePower: e.target.value }))
-              }
-            />
-          </label>
-        </div>
-      </div>
 
-      <div className="col-span-8">
+  const booleanSafetyFields = [
+    "abs",
+    "brakeAssist",
+    "emergencyBraking",
+    "blindSpotAssist",
+    "stabilityControl",
+    "tractionControl",
+    "driverAirbag",
+    "passangerAirbag",
+    "sideAirbag",
+    "headAirbag",
+    "kneeAirbag",
+    "laneAirbag",
+    "fatigueSensor",
+    "tirePressureSensor",
+    "trafficSignRecognition",
+    "collisionWarningSystem",
+    "automaticLevelControl",
+  ];
+  const booleanComfortFields = [
+    "centralDoorLock",
+    "keylessEntry",
+    "startButton",
+    "controlCircut",
+    "electricWindowsFront",
+    "electricWindowsBack",
+    "powerSteering",
+    "cruiseControl",
+    "airConditioning",
+    "parkingSensors",
+    "reverseCamera",
+    "parkingMachine",
+    "startStopSystem",
+  ];
+  const booleanInteriorFields = [
+    "heightAdjustmentSeat",
+    "electricAdjustmentSeat",
+    "heatedSeats",
+    "ventilatedSeats",
+    "sportsSeat",
+    "adjustableSteeringWheel",
+    "heatedSteeringWheel",
+    "rearHeadrest",
+    "foldingRearSeat",
+    "slidingRearSeat",
+    "centralArmRest",
+    "makeUpMirror",
+    "adjustableDashboardLighting",
+    "tachometer",
+    "dayCounter",
+    "coolantTemperatureGauge",
+    "outsiteTemperatureGauge",
+    "boardComputer",
+    "audioSystem",
+    "digitalRadio",
+  ];
+  const booleanExteriorFields = [
+    "intervalWiper",
+    "alloyWheels",
+    "rainSensor",
+    "sunRoof",
+    "panoramicRoof",
+    "roofRails",
+    "mettalicPaint",
+    "paintedBumpers",
+    "tintedGlass",
+    "rearPrivacyGlass",
+    "electricMirrors",
+    "foldingExteriorMirrors",
+    "frontFogLights",
+    "xenonHeadLights",
+    "ledHeahlights",
+    "ledRearLighting",
+    "dayLights",
+    "headlampWasher",
+    "burglarAlarm",
+  ];
+  return (
+    <div className="flex">
+      <Card className="p-4 mt-4 ml-4">
+        <Tabs aria-label="Pills" variant="pills">
+          <Tabs.Item active title="General">
+            <div className="flex flex-col gap-2 max-w-md mb-6">
+              <TextInput
+                type="text"
+                name="brand"
+                placeholder="Brand"
+                value={typeof filters.brand === "string" ? filters.brand : ""}
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="model"
+                placeholder="Model"
+                value={typeof filters.model === "string" ? filters.model : ""}
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="generation"
+                placeholder="Generation"
+                value={
+                  typeof filters.generation === "string"
+                    ? filters.generation
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="bodyType"
+                placeholder="Body Type"
+                value={
+                  typeof filters.bodyType === "string" ? filters.bodyType : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="transmission"
+                placeholder="Transmission"
+                value={
+                  typeof filters.transmission === "string"
+                    ? filters.transmission
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="number"
+                name="numberOfSeats"
+                placeholder="Number Of Seats"
+                value={
+                  typeof filters.numberOfSeats === "string"
+                    ? filters.numberOfSeats
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="segment"
+                placeholder="Segment"
+                value={
+                  typeof filters.segment === "string" ? filters.segment : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="driveWheel"
+                placeholder="Drive Wheel"
+                value={
+                  typeof filters.driveWheel === "string"
+                    ? filters.driveWheel
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="fuelType"
+                placeholder="Fuel Type"
+                value={
+                  typeof filters.fuelType === "string" ? filters.fuelType : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="number"
+                name="horsePower"
+                placeholder="Horse Power"
+                value={
+                  typeof filters.horsePower === "string"
+                    ? filters.horsePower
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="number"
+                name="torque"
+                placeholder="Body Type"
+                value={typeof filters.torque === "string" ? filters.torque : ""}
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="engineCapacity"
+                placeholder="Engine Capacity"
+                value={
+                  typeof filters.engineCapacity === "string"
+                    ? filters.engineCapacity
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <Checkbox
+                id="turbo"
+                name="turbo"
+                checked={!!filters.turbo}
+                onChange={handleChange}
+              />
+              <label htmlFor="turbo">Turbo (true/false)</label>
+              <TextInput
+                type="number"
+                name="fuelTankCapacity"
+                placeholder="Fuel Tank Capacity"
+                value={
+                  typeof filters.fuelTankCapacity === "string"
+                    ? filters.fuelTankCapacity
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="number"
+                name="cargoCapacity"
+                placeholder="Cargo Capacity"
+                value={
+                  typeof filters.cargoCapacity === "string"
+                    ? filters.cargoCapacity
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Performance">
+            <div className="flex flex-col gap-2 max-w-md mb-6">
+              <TextInput
+                type="number"
+                name="topSpeed"
+                placeholder="Top Speed"
+                value={
+                  typeof filters.topSpeed === "string" ? filters.topSpeed : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="acceleration"
+                placeholder="Acceleration"
+                value={
+                  typeof filters.acceleration === "string"
+                    ? filters.acceleration
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="emmision"
+                placeholder="Emmision"
+                value={
+                  typeof filters.emmision === "string" ? filters.emmision : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="urbanConsumption"
+                placeholder="Urban COnsumption"
+                value={
+                  typeof filters.urbanConsumption === "string"
+                    ? filters.urbanConsumption
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+              <TextInput
+                type="text"
+                name="powerConsumption"
+                placeholder="Power Consumption"
+                value={
+                  typeof filters.powerConsumption === "string"
+                    ? filters.powerConsumption
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+
+              <TextInput
+                type="number"
+                name="batteryRange"
+                placeholder="Battery Range"
+                value={
+                  typeof filters.batteryRange === "string"
+                    ? filters.batteryRange
+                    : ""
+                }
+                onChange={handleChange}
+                className="border p-2 rounded"
+              />
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Safety">
+            <div className="">
+              <h2 className="text-lg font-bold mb-2">Filtreler</h2>
+              {booleanSafetyFields.map((fieldName) => (
+                <div key={fieldName} className="flex gap-1">
+                  <label>
+                    <Checkbox
+                      name={fieldName}
+                      checked={!!filters[fieldName]}
+                      onChange={handleChange}
+                    />
+                    {" " + fieldName}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Comfort">
+            <div className="">
+              <h2 className="text-lg font-bold mb-2">Filtreler</h2>
+              {booleanComfortFields.map((fieldName) => (
+                <div key={fieldName} className="flex gap-3">
+                  <label>
+                    <Checkbox
+                      name={fieldName}
+                      checked={!!filters[fieldName]}
+                      onChange={handleChange}
+                    />
+                    {" " + fieldName}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Interior">
+            <div className="">
+              <h2 className="text-lg font-bold mb-2">Filtreler</h2>
+              {booleanInteriorFields.map((fieldName) => (
+                <div key={fieldName} className="flex gap-3">
+                  <label>
+                    <Checkbox
+                      name={fieldName}
+                      checked={!!filters[fieldName]}
+                      onChange={handleChange}
+                    />
+                    {" " + fieldName}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </Tabs.Item>
+          <Tabs.Item title="Exterior">
+            <div className="">
+              <h2 className="text-lg font-bold mb-2">Filtreler</h2>
+              {booleanExteriorFields.map((fieldName) => (
+                <div key={fieldName} className="flex gap-3">
+                  <label>
+                    <Checkbox
+                      name={fieldName}
+                      checked={!!filters[fieldName]}
+                      onChange={handleChange}
+                    />
+                    {" " + fieldName}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </Tabs.Item>
+        </Tabs>
+      </Card>
+      <div className="">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
           {filteredCars.map((car) => (
             <Card key={car.id} className="max-w-sm">

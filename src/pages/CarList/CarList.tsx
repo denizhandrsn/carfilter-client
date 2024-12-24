@@ -580,7 +580,7 @@ const CarList: React.FC = () => {
               <TextInput
                 type="number"
                 name="torque"
-                placeholder="Body Type"
+                placeholder="Torque"
                 value={typeof filters.torque === "string" ? filters.torque : ""}
                 onChange={handleChange}
                 className="border p-2 rounded"

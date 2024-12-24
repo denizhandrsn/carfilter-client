@@ -249,13 +249,32 @@ const AddCarComponent = (props: Props) => {
     },
   };
 
+  const handleSubmit = async (values: CarDetailsFormValues) => {
+    try {
+      const response = await fetch("https://localhost:7298/api/Car/addcar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Başarılıysa
+        console.log("Car added successfully:", data);
+      } else {
+        // Hata durumu
+        console.error("Error adding car:", data);
+      }
+    } catch (error) {
+      // Ağı (network) ile ilgili hataları yakalayabiliriz
+      console.error("Network error:", error);
+    }
+  };
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
-    >
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ values }) => (
         <Form>
           <div className="grid grid-cols-12">

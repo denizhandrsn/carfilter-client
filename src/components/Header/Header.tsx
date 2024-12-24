@@ -17,17 +17,13 @@ const Header = () => {
       </NavbarBrand>
       <NavbarToggle />
       <NavbarCollapse>
-        <NavbarLink href="#" className="text-white">
+        <NavbarLink as={Link} to="/" className="text-white">
           Home
         </NavbarLink>
-        <NavbarLink as={Link} href="#" className="text-white">
+        <NavbarLink as={Link} to="/about" className="text-white">
           About
         </NavbarLink>
-        <NavbarLink href="#" className="text-white">
-          Services
-        </NavbarLink>
-
-        <NavbarLink href="#" className="text-white">
+        <NavbarLink as={Link} to="/contact" className="text-white">
           Contact
         </NavbarLink>
       </NavbarCollapse>
